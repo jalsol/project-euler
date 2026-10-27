@@ -1,0 +1,10 @@
+load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
+
+# One binary per problems/*.cpp, named after the file (p001.cpp -> //problems:p001).
+[
+    cc_binary(
+        name = src[:-len(".cpp")],
+        srcs = [src],
+    )
+    for src in glob(["*.cpp"])
+]

@@ -1,0 +1,14 @@
+# Compute-heavy Euler solutions: optimized by default.
+build --compilation_mode=opt
+
+build --cxxopt=-std=c++26
+
+# -march=native targets this CPU (AVX-512 here), so binaries only run on this
+# machine. Drop -march/-mtune to build portable binaries.
+build --copt=-O3
+build --copt=-march=native
+build --copt=-mtune=native
+
+build --copt=-fomit-frame-pointer
+build --copt=-fno-math-errno
+build --copt=-pipe
