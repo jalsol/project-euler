@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Usage: ./new cpp|ocaml|python <N>
+set -euo pipefail
+cd -- "$(dirname -- "$0")"
+
+usage() { echo "usage: ./new cpp|ocaml|python <N>" >&2; exit 2; }
+
+[ $# -eq 2 ] || usage
+case $2 in ''|*[!0-9]*) usage ;; esac
+p=$(printf 'p%03d' "$((10#$2))")
+
+case $1 in
+  cpp) file="cpp/problems/$p.cpp" ;;
+  ml)  file="ocaml/problems/$p.ml" ;;
+  py)  file="python/problems/$p.py" ;;
+  *) usage ;;
+esac
+
+if [ -e "$file" ]; then
+  echo "$file already exists" >&2
+  exit 1
+fi
+
+: > "$file"
+echo "$file"

@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Usage: ./run <N> | ./run cpp|ocaml|python <N>
+set -euo pipefail
+cd -- "$(dirname -- "$0")"
+shopt -s nullglob
+
+usage() { echo "usage: ./run <N> | ./run cpp|ocaml|python <N>" >&2; exit 2; }
+
+problem() { printf 'p%03d' "$((10#$1))"; }
+
+run_cpp() { ( cd cpp && exec bazel run "//problems:$1" ); }
+
+run_ocaml() {
+  local names="" f
+  for f in ocaml/problems/p*.ml; do names+="$(basename "$f" .ml) "; done
+  names=${names% }
+  [ -n "$names" ] || { echo "no ocaml/problems/p*.ml" >&2; exit 1; }
+  printf '; names synced from problems/*.ml by ./run\n\n(executables\n (names %s)\n (libraries core))\n' "$names" > ocaml/problems/dune
+  ( cd ocaml && exec dune exec "problems/$1.exe" )
+}
+
+run_python() { ( cd python && exec uv run "problems/$1.py" ); }
+
+case "${1:-}" in
+  cpp) [ $# -eq 2 ] || usage; run_cpp "$(problem "$2")" ;;
+  ml)  [ $# -eq 2 ] || usage; run_ocaml "$(problem "$2")" ;;
+  py)  [ $# -eq 2 ] || usage; run_python "$(problem "$2")" ;;
+  "")     usage ;;
+  *[!0-9]*) usage ;;
+  *)
+    [ $# -eq 1 ] || usage
+    p=$(problem "$1")
+    ran=0
+    if [ -f "cpp/problems/$p.cpp" ]; then ran=1; run_cpp "$p"; else echo "skip cpp: no cpp/problems/$p.cpp" >&2; fi
+    if [ -f "ocaml/problems/$p.ml" ]; then ran=1; run_ocaml "$p"; else echo "skip ocaml: no ocaml/problems/$p.ml" >&2; fi
+    if [ -f "python/problems/$p.py" ]; then ran=1; run_python "$p"; else echo "skip python: no python/problems/$p.py" >&2; fi
+    [ "$ran" -eq 1 ] || { echo "problem $p not found" >&2; exit 1; }
+    ;;
+esac

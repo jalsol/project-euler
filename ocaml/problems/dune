@@ -1,2 +1,5 @@
+; names synced from problems/*.ml by ./run
+
 (executables
- (names p001))
+ (names p001 p006)
+ (libraries core))
