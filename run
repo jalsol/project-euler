@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Usage: ./run <N> | ./run cpp|ocaml|python <N>
+# Usage: ./run <N> | ./run cpp|ml|py <N>
 set -euo pipefail
 cd -- "$(dirname -- "$0")"
 shopt -s nullglob
 
-usage() { echo "usage: ./run <N> | ./run cpp|ocaml|python <N>" >&2; exit 2; }
+usage() { echo "usage: ./run <N> | ./run cpp|ml|py <N>" >&2; exit 2; }
 
 problem() { printf 'p%03d' "$((10#$1))"; }
 

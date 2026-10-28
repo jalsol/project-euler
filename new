@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Usage: ./new cpp|ocaml|python <N>
+# Usage: ./new cpp|ml|py <N>
 set -euo pipefail
 cd -- "$(dirname -- "$0")"
 
-usage() { echo "usage: ./new cpp|ocaml|python <N>" >&2; exit 2; }
+usage() { echo "usage: ./new cpp|ml|py <N>" >&2; exit 2; }
 
 [ $# -eq 2 ] || usage
 case $2 in ''|*[!0-9]*) usage ;; esac

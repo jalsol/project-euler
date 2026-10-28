@@ -6,8 +6,8 @@ im stupid at math but can i abuse computational power?
 
     ./run 6          # every language that has problem 6
     ./run cpp 6
-    ./run ocaml 6
-    ./run python 6
+    ./run ml 6
+    ./run py 6
 
 `./run` syncs OCaml's static `(names ...)` list from `problems/*.ml` before
 building, since dune has no glob for executable names.
@@ -15,8 +15,8 @@ building, since dune has no glob for executable names.
 ## Creating a problem
 
     ./new cpp 7
-    ./new ocaml 7
-    ./new python 7
+    ./new ml 7
+    ./new py 7
 
 Writes an empty `problems/pNNN.<ext>` and refuses to overwrite.
 
@@ -43,5 +43,5 @@ via `(libraries core)`.
     cd python
     uv run problems/p001.py
 
-Drop `problems/pNNN.py` in; `./run python N` runs it with uv. Requires Python
+Drop `problems/pNNN.py` in; `./run py N` runs it with uv. Requires Python
 3.14+, per `pyproject.toml`; add dependencies with `uv add`.
